@@ -1,0 +1,2 @@
+ServerFactory provides a simple way to deal with ServerSocket objects.
+It opens up a ServerSocket for you and helps you to handle the incoming requests.
