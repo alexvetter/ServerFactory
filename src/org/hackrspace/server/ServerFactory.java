@@ -1,5 +1,7 @@
 package org.hackrspace.server;
 
+import org.hackrspace.server.handler.Handler;
+
 public class ServerFactory {
 	private ServerFactory() {
 		//do nothing

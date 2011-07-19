@@ -1,4 +1,4 @@
-package org.hackrspace.server;
+package org.hackrspace.server.handler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class PrintRequestHandler extends SingleThreadHandler {
+public class PrintRequestHandler extends MultiThreadHandler {
 	@Override
 	public void handle(Socket socket) {
 		String nachricht = null;

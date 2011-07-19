@@ -6,11 +6,22 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.hackrspace.server.handler.Handler;
+import org.hackrspace.server.handler.MultiThreadHandler;
+import org.hackrspace.server.handler.SingleThreadHandler;
+
 public class Server {
 	private final Integer port;
 	private final Handler handler;
 	private ExecutorService pool;
 
+	/**
+	 * 
+	 * @param port
+	 * @param handler
+	 * 
+	 * @throws IllegalThreadHandlerException
+	 */
 	public Server(Integer port, Handler handler) {
 		this.port = port;
 		this.handler = handler;
@@ -20,7 +31,7 @@ public class Server {
 		} else if (MultiThreadHandler.class.isInstance(this.handler)) {
 			this.pool = Executors.newCachedThreadPool();
 		} else {
-			// TODO throw new Exception
+			throw new IllegalThreadHandlerException("The handler is not an instance of SingleThreadHandler or MultiThreadHandler.");
 		}
 	}
 
@@ -32,13 +43,12 @@ public class Server {
 		return handler;
 	}
 
-	public void start() {
+	public void start() throws IOException {
 		try {
 			ServerSocket serverSocket = new ServerSocket(getPort());
 			handler.setServerSocket(serverSocket);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			return;
+			throw e;
 		}
 
 		ThreadHelper helper = new ThreadHelper(pool, handler);
@@ -76,7 +86,6 @@ class ThreadHelper extends Thread {
 	public void run() {
 		while (true) {
 			pool.execute(handler.initialize());
-			System.out.println("added");
 		}
 	}
 }

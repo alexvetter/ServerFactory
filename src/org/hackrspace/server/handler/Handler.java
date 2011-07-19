@@ -1,4 +1,4 @@
-package org.hackrspace.server;
+package org.hackrspace.server.handler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
