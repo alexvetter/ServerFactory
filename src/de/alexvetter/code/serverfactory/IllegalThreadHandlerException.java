@@ -1,4 +1,4 @@
-package org.hackrspace.server;
+package de.alexvetter.code.serverfactory;
 
 public class IllegalThreadHandlerException extends RuntimeException {
 	/**

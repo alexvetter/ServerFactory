@@ -1,4 +1,4 @@
-package org.hackrspace.server;
+package de.alexvetter.code.serverfactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,9 +6,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.hackrspace.server.handler.Handler;
-import org.hackrspace.server.handler.MultiThreadHandler;
-import org.hackrspace.server.handler.SingleThreadHandler;
+import de.alexvetter.code.serverfactory.handler.Handler;
+import de.alexvetter.code.serverfactory.handler.MultiThreadHandler;
+import de.alexvetter.code.serverfactory.handler.SingleThreadHandler;
 
 public class Server {
 	private final Integer port;

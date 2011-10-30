@@ -1,6 +1,6 @@
-package org.hackrspace.server;
+package de.alexvetter.code.serverfactory;
 
-import org.hackrspace.server.handler.Handler;
+import de.alexvetter.code.serverfactory.handler.Handler;
 
 public class ServerFactory {
 	private ServerFactory() {

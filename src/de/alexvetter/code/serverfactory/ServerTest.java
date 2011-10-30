@@ -1,8 +1,8 @@
-package org.hackrspace.server;
+package de.alexvetter.code.serverfactory;
 
 import java.io.IOException;
 
-import org.hackrspace.server.handler.PrintRequestHandler;
+import de.alexvetter.code.serverfactory.handler.PrintRequestHandler;
 
 public class ServerTest {
 
