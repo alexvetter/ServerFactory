@@ -1,8 +1,9 @@
-package de.alexvetter.code.serverfactory;
+package org.kaffeezusatz.serverfactory;
 
 import java.io.IOException;
 
-import de.alexvetter.code.serverfactory.handler.PrintRequestHandler;
+import org.kaffeezusatz.serverfactory.handler.PrintRequestHandler;
+
 
 public class ServerTest {
 
@@ -11,7 +12,7 @@ public class ServerTest {
 	 */
 	public static void main(String[] args) {
 		synchronized (Thread.currentThread()) {	
-			Server server = ServerFactory.getServer(80, new PrintRequestHandler());
+			Server server = ServerFactory.getServer(8080, new PrintRequestHandler());
 			
 			try {
 				server.start();

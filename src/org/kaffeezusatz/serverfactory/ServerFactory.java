@@ -1,6 +1,6 @@
-package de.alexvetter.code.serverfactory;
+package org.kaffeezusatz.serverfactory;
 
-import de.alexvetter.code.serverfactory.handler.Handler;
+import org.kaffeezusatz.serverfactory.handler.Handler;
 
 public class ServerFactory {
 	private ServerFactory() {

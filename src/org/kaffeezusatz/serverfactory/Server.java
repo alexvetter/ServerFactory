@@ -1,4 +1,4 @@
-package de.alexvetter.code.serverfactory;
+package org.kaffeezusatz.serverfactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,9 +6,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import de.alexvetter.code.serverfactory.handler.Handler;
-import de.alexvetter.code.serverfactory.handler.MultiThreadHandler;
-import de.alexvetter.code.serverfactory.handler.SingleThreadHandler;
+import org.kaffeezusatz.serverfactory.handler.Handler;
+import org.kaffeezusatz.serverfactory.handler.MultiThreadHandler;
+import org.kaffeezusatz.serverfactory.handler.SingleThreadHandler;
+
 
 public class Server {
 	private final Integer port;

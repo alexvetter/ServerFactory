@@ -1,4 +1,4 @@
-package de.alexvetter.code.serverfactory.handler;
+package org.kaffeezusatz.serverfactory.handler;
 
 import java.io.BufferedReader;
 import java.io.IOException;

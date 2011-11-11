@@ -1,4 +1,4 @@
-package de.alexvetter.code.serverfactory;
+package org.kaffeezusatz.serverfactory;
 
 public class IllegalThreadHandlerException extends RuntimeException {
 	/**
