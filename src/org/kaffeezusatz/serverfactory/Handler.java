@@ -1,7 +1,5 @@
 package org.kaffeezusatz.serverfactory;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -75,8 +73,11 @@ public abstract class Handler extends Thread implements Runnable {
 			try {
 				if (!s.isClosed()) {
 					setSocketSettings(s);
-					final BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-					final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+					//final BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
+					//final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), "UTF-8"));
+					
+					final InputStreamReader in = new InputStreamReader(s.getInputStream(), "UTF-8");
+					final OutputStreamWriter out = new OutputStreamWriter(s.getOutputStream(), "UTF-8");
 
 					fireNewRequest();
 					
@@ -108,5 +109,5 @@ public abstract class Handler extends Thread implements Runnable {
 		return s;
 	}
 	
-	public abstract void handleClient(BufferedReader in, BufferedWriter out) throws IOException;
+	public abstract void handleClient(InputStreamReader in, OutputStreamWriter out) throws IOException;
 }

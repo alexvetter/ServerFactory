@@ -10,7 +10,7 @@ public class HandlerPool {
 	/**
 	 * max # handler threads
 	 */
-	final static int handlers = 5;
+	final static int handlers = 10;
 
 	/**
 	 * Where handler threads stand idle
