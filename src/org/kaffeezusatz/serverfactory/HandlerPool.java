@@ -31,7 +31,7 @@ public class HandlerPool {
 			throw new IllegalArgumentException(e);
 		}
 	}
-
+	
 	private void initWorker(Class<? extends Handler> workerClass) throws InstantiationException, IllegalAccessException {
 		synchronized (threads) {
 			/* start worker threads */
@@ -52,7 +52,7 @@ public class HandlerPool {
 				Handler w = getWorker();
 				/* give the request to worker thread */
 				/* and start request handling */
-				w.setSocketNotify(s);
+				w.setSocket(s);
 				/* start over */
 			} catch (Exception e) {
 				e.printStackTrace();

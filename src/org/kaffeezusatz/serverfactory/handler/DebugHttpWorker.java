@@ -13,7 +13,7 @@ import org.kaffeezusatz.serverfactory.Handler;
 
 public class DebugHttpWorker extends Handler {
 	public DebugHttpWorker() {
-		super(3000);
+		super();
 	}
 	
 	@Override
@@ -22,7 +22,7 @@ public class DebugHttpWorker extends Handler {
 		return super.setSocketSettings(s);
 	}
 
-	public void handleClient(InputStreamReader in, OutputStreamWriter out) throws IOException {
+	public void handleRequest(InputStreamReader in, OutputStreamWriter out) throws IOException {
 		Map<String, String> headers = new HashMap<String, String>();
 		
 		StringBuffer request = new StringBuffer();

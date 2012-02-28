@@ -5,8 +5,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Handler extends Thread implements Runnable {
 	/**
@@ -14,51 +12,35 @@ public abstract class Handler extends Thread implements Runnable {
 	 */
 	protected Socket s;
 
-	protected int timeout;
+	protected int timeout = 5000;
 
 	private HandlerPool pool;
 	
-	private List<HandlerActionListener> listener;
-
-	public Handler(int timeout) {
+	public Handler() {
 		super("Request Handler");
-		
+	}
+	
+	public synchronized void setSoTimeout(int timeout) {
 		this.timeout = timeout;
-		listener = new ArrayList<HandlerActionListener>();
-	}
-
-	public void addListener(HandlerActionListener listener) {
-		this.listener.add(listener);
 	}
 	
-	public void removeListener(HandlerActionListener listener) {
-		this.listener.remove(listener);
-	}
-	
-	protected void fireNewRequest() {
-		for (HandlerActionListener listener : this.listener) {
-			listener.newRequest();
-		}
-	}
-	
-	protected void fireFinishedRequest() {
-		for (HandlerActionListener listener : this.listener) {
-			listener.finishedRequest();
-		}
-	}
-	
-	protected void setWorkerPool(HandlerPool pool) {
-		this.pool = pool;
-	}
-
-	public synchronized void setSocketNotify(final Socket s) {
+	public synchronized void setSocket(final Socket s) {
 		this.s = s;
 		if (this.s != null) {
 			notify();
 		}
 	}
+	
+	public Socket setSocketSettings(Socket s) throws SocketException {
+		s.setSoTimeout(timeout);
+		return s;
+	}
 
-	public synchronized void run() {
+	protected void setWorkerPool(HandlerPool pool) {
+		this.pool = pool;
+	}
+
+	public final synchronized void run() {
 		while (true) {
 			if (s == null) {
 				/* nothing to do */
@@ -73,17 +55,11 @@ public abstract class Handler extends Thread implements Runnable {
 			try {
 				if (!s.isClosed()) {
 					setSocketSettings(s);
-					//final BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
-					//final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), "UTF-8"));
-					
+
 					final InputStreamReader in = new InputStreamReader(s.getInputStream(), "UTF-8");
 					final OutputStreamWriter out = new OutputStreamWriter(s.getOutputStream(), "UTF-8");
-
-					fireNewRequest();
 					
-					handleClient(in, out);
-					
-					fireFinishedRequest();
+					handleRequest(in, out);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -103,11 +79,6 @@ public abstract class Handler extends Thread implements Runnable {
 			pool.addWorker(this);
 		}
 	}
-
-	public Socket setSocketSettings(Socket s) throws SocketException {
-		s.setSoTimeout(timeout);
-		return s;
-	}
 	
-	public abstract void handleClient(InputStreamReader in, OutputStreamWriter out) throws IOException;
+	public abstract void handleRequest(InputStreamReader in, OutputStreamWriter out) throws IOException;
 }
