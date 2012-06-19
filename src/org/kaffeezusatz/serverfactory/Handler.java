@@ -1,23 +1,26 @@
 package org.kaffeezusatz.serverfactory;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.SocketException;
 
-public abstract class Handler extends Thread implements Runnable {
+public abstract class Handler extends Thread implements Closeable {
 	/**
 	 * Socket to client we're handling
 	 */
 	protected Socket s;
+	
+	private Boolean closed = Boolean.FALSE;
 
 	protected int timeout = 5000;
 
 	private HandlerPool pool;
 	
 	public Handler() {
-		super("Request Handler");
+		super("Handler");
 	}
 	
 	public synchronized void setSoTimeout(int timeout) {
@@ -31,29 +34,28 @@ public abstract class Handler extends Thread implements Runnable {
 		}
 	}
 	
-	public Socket setSocketSettings(Socket s) throws SocketException {
+	public Socket setSocketSettings(final Socket s) throws SocketException {
 		s.setSoTimeout(timeout);
 		return s;
 	}
 
-	protected void setWorkerPool(HandlerPool pool) {
+	protected void setHandlerPool(HandlerPool pool) {
 		this.pool = pool;
 	}
 
 	public final synchronized void run() {
-		while (true) {
+		while (!isClosed()) {
 			if (s == null) {
-				/* nothing to do */
 				try {
 					wait();
-				} catch (InterruptedException e) {
-					/* should not happen */
-					continue;
+				} catch (InterruptedException ignore) {
+					//ignore
 				}
 			}
-
+			
 			try {
-				if (!s.isClosed()) {
+				/* do something */
+				if (s != null && !s.isClosed()) {
 					setSocketSettings(s);
 
 					final InputStreamReader in = new InputStreamReader(s.getInputStream(), "UTF-8");
@@ -65,19 +67,42 @@ public abstract class Handler extends Thread implements Runnable {
 				e.printStackTrace();
 			} finally {
 				try {
-					s.close();
+					if (s != null) {
+						s.close();
+					}
 				} catch (IOException ignore) {
 					// ignore
 				}
 			}
-
+			
 			/*
-			 * go back in wait queue if there's fewer than numHandler
-			 * connections.
+			 * go back in waiting list
 			 */
-			s = null;
-			pool.addWorker(this);
+			pool.addHandler(this);
 		}
+	}
+	
+	public boolean isClosed() {
+		synchronized (closed) {
+			return closed;
+		}
+	}
+	
+	public synchronized void close() {
+		if (isClosed()) {
+			return;
+		}
+		
+		try {
+			if (s != null) {
+				s.close();
+			}
+		} catch (IOException ignore) {
+			//ignore
+		}
+		s = null;
+		
+		closed = Boolean.TRUE;
 	}
 	
 	public abstract void handleRequest(InputStreamReader in, OutputStreamWriter out) throws IOException;
